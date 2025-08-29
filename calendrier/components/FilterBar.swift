@@ -14,7 +14,8 @@ struct FilterBar: View {
         HStack(spacing: 20) {
             ForEach(FilterType.visibleCases, id: \.self) { filter in
                 Button(action: {
-                    selection = filter
+                    if selection == filter { selection = .none }
+                    else { selection = filter }
                 }) {
                     FilterBtnLbl(
                         selected: filter.rawValue,

@@ -19,12 +19,16 @@ func getCurrentDateDetailed() -> String {
     return formatter.string(from: Date())
 }
 
+func getModifiedDateDetailed(date: Date) -> String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "'modified': MMMM d, yyyy 'at' h:mm a"
+    return formatter.string(from: date)
+}
+
 func getSummary(summary: String) -> String {
     let truncatedContent: String
     if summary.count > 20 {
         truncatedContent = summary.prefix(20) + "…"
-    } else {
-        return summary
-    }
+    } else { return summary }
     return truncatedContent
 }

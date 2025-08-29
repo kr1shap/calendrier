@@ -9,45 +9,71 @@ import SwiftUI
 struct SummaryCardSmall: View {
     var summary: String
     var title: String
+    var modDate: Date
+    var deleteMode: Bool = false
+    var onDelete: () -> Void
    
     var body: some View {
-        VStack(alignment: .leading, spacing: 15) {
-            HStack {
-                Image(.calendierNoteIcon)
-                    .resizable()
-                    .frame(width: 30, height: 30)
-                Text(title)
-                    .foregroundStyle(Color.deepBlueAccent)
-                    .fontWeight(.bold)
-                    .font(.DMSans(.title3))
-                    .lineLimit(2)
+        HStack(alignment: .center) {
+            if deleteMode {
+                Button {
+                    onDelete()
+                } label: {
+                    Image(systemName:"x.circle.fill")
+                        .font(.title)
+                        .foregroundStyle(Color.deepBlueAccent)
+
+                }
+                .transition(.scale.combined(with: .opacity))
+
+            }
+            VStack(alignment: .leading, spacing: 4) {
+                HStack {
+                    Image(.calendierNoteIcon)
+                        .resizable()
+                        .frame(width: 25, height: 25)
+                    Text(title)
+                        .foregroundStyle(Color.deepBlueAccent)
+                        .fontWeight(.bold)
+                        .font(.DMSans(.title3))
+                        .lineLimit(2)
+                        .truncationMode(.tail)
+                        .padding(0)
+                }
+                .padding(0)
+                
+                Text(getModifiedDateDetailed(date: modDate))
+                    .foregroundStyle(Color.secondary)
+                    .font(.DMSans(.caption2))
+                    .truncationMode(.tail)
+                    .fontWeight(.light)
+                    .padding(.bottom, 7)
+                
+                Text(summary.isEmpty ? "No Content" : summary)
+                    .font(.DMSans(.callout))
+                    .lineLimit(4)
                     .truncationMode(.tail)
             }
-            
-            Text(summary.isEmpty ? "No Content" : summary)
-                .font(.DMSans(.callout))
-                .lineLimit(4)
-                .truncationMode(.tail)
+            .frame(maxWidth: .infinity, minHeight: 70, alignment: .topLeading)
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color.offWhite)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.darkGrayBackground, lineWidth: 1)
+                    )
+            )
+            .padding(.horizontal, deleteMode ? 10 : 0)
+
         }
-        .frame(maxWidth: .infinity, minHeight: 70, alignment: .topLeading)
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.offWhite)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.darkGrayBackground, lineWidth: 1)
-                )
-        )
         .padding(.vertical, 10)
         .padding(.horizontal, 30)
-
-      
     }
 }
 
 #Preview {
-    SummaryCardSmall(summary: "well ok this is a bit touch go do wel", title: "B09 Course Notes")
+    SummaryCardSmall(summary: "well ok this is a bit touch go do wel", title: "B09 Course Notes", modDate: Date(), deleteMode: false, onDelete: {})
 }
 
 

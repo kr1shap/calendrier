@@ -16,6 +16,10 @@ extension Color {
     static let softCream = Color(red: 255/255, green: 250/255, blue: 234/255)
 }
 
+extension UIColor {
+    static let softCream = UIColor(red: 255/255, green: 250/255, blue: 234/255, alpha: 1)
+}
+
 extension Font.TextStyle {
     func toUIFontTextStyle() -> UIFont.TextStyle {
         switch self {

@@ -15,7 +15,7 @@ struct LandingPageView: View {
             ZStack {
                 AnimationView()
             VStack(spacing: 20) {
-                // Title
+                //Title
                 Text("calendrier")
                     .font(.DMSansS(45))
                     .fontWeight(.bold)
@@ -84,9 +84,7 @@ private struct AnimatedTextView: View {
                         )
                 )
                 .onAppear {
-                    withAnimation(.easeInOut(duration: 1.5)) {
-                        animate = true
-                    }
+                    withAnimation(.easeInOut(duration: 1.5)) { animate.toggle() }
                 }
             
             Text("notebook")

@@ -12,32 +12,27 @@ struct NotePageView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     
-    var note: NoteModel? = nil  //existing note
-
-    @State private var noteTitle: String = ""
-    @State private var noteContent: String = ""
-    @State private var isStarred = false
+    var note: NoteModel? = nil
+    
+    @StateObject private var nVM = NotePageVM()
     
     init(note: NoteModel? = nil) {
-        self.note = note
-        _noteTitle = State(initialValue: note?.title ?? "")
-        _noteContent = State(initialValue: note?.content ?? "")
-        _isStarred = State(initialValue: note?.isStarred ?? false)
+        _nVM = StateObject(wrappedValue: NotePageVM(note: note))
     }
-    
+
     
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     HStack {
-                        TextField("Title", text: $noteTitle)
+                        TextField("Title", text: $nVM.noteTitle)
                             .font(.DMSans(.largeTitle))
                             .foregroundStyle(Color.darkGrayBackground)
                             .fontWeight(.semibold)
                             .padding()
                         
-                        SelectorButton(trigger: $isStarred, symbolTrue: "star.fill", symbolFalse:"star")
+                        SelectorButton(trigger: $nVM.isStarred, symbolTrue: "star.fill", symbolFalse:"star")
                     }
                 
                     Text(getCurrentDateDetailed())
@@ -47,10 +42,10 @@ struct NotePageView: View {
                         .padding(.bottom, 10)
                     
                     ZStack(alignment: .topLeading) {
-                        if noteContent.isEmpty {
+                        if nVM.noteContent.isEmpty {
                             EmptyNoteContentView()
                         }
-                        TextEditor(text: $noteContent)
+                        TextEditor(text: $nVM.noteContent)
                             .foregroundStyle(Color.darkGrayBackground)
                             .font(.DMSans(.callout))
                             .padding(.horizontal, 12)
@@ -108,47 +103,18 @@ struct NotePageView: View {
     //MARK: Saves note
     //TODO: MODULARIZE PROPERLY (VM)
     private func saveNote() {
-           if let note = note {
-               note.title = noteTitle
-               note.content = noteContent
-               note.isStarred = isStarred
-               note.updateModifiedDate()
-           } else {
-               let newNote = NoteModel(title: noteTitle, content: noteContent, isStarred: isStarred)
-               context.insert(newNote)
-           }
-           do {
-               try context.save()
-               dismiss()
-           } catch {
-               print("Failed to save note:", error)
-           }
-    }
-}
-
-
-//MARK: Generic selector button to toggle option
-private struct SelectorButton: View {
-    @Binding var trigger: Bool
-    var symbolTrue: String
-    var symbolFalse: String
-    var body: some View {
-        Button {
-            withAnimation(.easeInOut(duration: 0.4)) {
-                trigger.toggle()
-            }
-        } label: {
-            HStack {
-                Image(systemName: trigger ? symbolTrue : symbolFalse)
-            }
-            .font(.largeTitle)
-            .foregroundStyle(Color.secondary)
-            .padding(.vertical, 10)
-            .padding(.horizontal, 20)
-
+        if let note = nVM.existingNote  {
+            nVM.update(note: note, drawing: nil)
+        } else { context.insert(nVM.newNoteR()) }
+        do {
+           try context.save()
+           dismiss()
+        } catch {
+           print("Failed to save note:", error)
         }
     }
 }
+
 
 //MARK: Empty note content text view
 private struct EmptyNoteContentView: View {
