@@ -17,7 +17,7 @@ As someone who loves to delve into UX/UI solutions, I designed this app to provi
 ## ‼️ features
 
 * **take your notes!**: Create standard notes, or hand-drawn notes; integrated using Apple's PencilKit framework. To edit an existing note, simply tap on it.
-* **filters & sorting**: Sort and filter notes if needed. [still in progress]
+* **filters & sorting**: Sort and filter notes if needed.
 * **delete notes**: Pretty straightforward, delete any notes with a clean and intuitive UI.
 * **persistent storage**: Notes are stored using **SwiftData**, ensuring data persistence. Note, data persistence is local to your device.
 * **custom styling**: I utilized my own styling, having a modern, yet fun UI using custom colours and subtle animations
