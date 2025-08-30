@@ -4,7 +4,7 @@
 
 As someone who loves to delve into UX/UI solutions, I designed this app to provide a simple, yet aesthetically pleasing UI solution, with clean user flows. 
 
-(MVP, basic demo video)[https://youtu.be/ZHfvFoAdSMk]
+[MVP, basic demo video](https://youtu.be/ZHfvFoAdSMk)
 
 <p align="center">
 <img width="251" height="527" alt="image" src="https://github.com/user-attachments/assets/6e7661e8-7664-444c-9c96-8b1e2b3699b9" />
