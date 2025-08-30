@@ -66,4 +66,3 @@ _In the future, I hope to add image support (i.e. drop images from gallery), and
 * **PencilKit** for drawing functionality
 
 ---
-
