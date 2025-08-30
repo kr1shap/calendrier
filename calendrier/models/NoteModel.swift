@@ -31,6 +31,7 @@ class NoteModel {
         self.isDrawing = isDrawing
     }
     
+    //Function updates modified date
     func updateModifiedDate() {
         self.modifiedDate = Date()
     }

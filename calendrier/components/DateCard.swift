@@ -7,20 +7,32 @@
 import SwiftUI
 
 struct DateCard: View {
-    let date = Date()
-   
+    //TODO: Crashes when I remove date?
+    var date = Date()
     var body: some View {
         HStack(alignment: .center, spacing: 50) {
-                Image(.calendrierYellowIcon)
-                    .resizable()
-                    .frame(width: 125, height: 125)
-                Text(Date.now, format: .dateTime.day().month().year())
+            Image(.calendrierYellowIcon)
+                .resizable()
+                .frame(width: 125, height: 125)
+            //Date
+            VStack {
+                Text(Date.now, format: .dateTime.day().month())
                     .foregroundStyle(Color.deepBlueAccent)
                     .fontWeight(.bold)
                     .font(.title)
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
                     .truncationMode(.tail)
+                
+                Text(Date.now, format: .dateTime.year())
+                    .foregroundStyle(Color.deepBlueAccent)
+                    .fontWeight(.bold)
+                    .font(.title)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .truncationMode(.tail)
+            }
+            
             
         }
         .frame(maxWidth: .infinity, minHeight: 140)

@@ -25,29 +25,12 @@ struct LandingPageView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 RockingImage()
                 Spacer()
-                
+                //Animated text
                 AnimatedTextView(animate: $animate)
                 
                 Spacer()
-
-                Button("Get Started") {
-                   navigateToHome = true
-                }
-                .font(.DMSans(.title3))
-                .fontWeight(.semibold)
-                .padding()
-                .frame(maxWidth: .infinity, alignment: .center)
-                .background(
-                    RoundedRectangle(cornerRadius: 30)
-                        .fill(Color.offWhite)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 30)
-                                .stroke(Color.darkGrayBackground, lineWidth: 1)
-                        )
-                )
-                .foregroundColor(.darkGrayBackground)
-                .padding(.horizontal, 50)
-                .padding(.vertical, 20)
+                //Navigate button
+                TextBtn(action: {navigateToHome = true}, text: "Get Started")
                 
             }
         
@@ -67,6 +50,7 @@ struct LandingPageView: View {
 }
 
 
+//MARK: Animated 'highlight' text
 private struct AnimatedTextView: View {
     @Binding var animate: Bool
 
@@ -97,6 +81,7 @@ private struct AnimatedTextView: View {
     }
 }
 
+//MARK: Rocking image animation
 private struct RockingImage: View {
     @State private var angle: Double = -10
 
@@ -113,6 +98,7 @@ private struct RockingImage: View {
     }
 }
 
+//MARK: Rive animation view
 private struct AnimationView: View {
     var body: some View {
         RiveViewModel(fileName: "bkgnd").view()

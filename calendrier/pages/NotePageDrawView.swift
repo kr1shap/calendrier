@@ -23,6 +23,7 @@ struct NotePageDrawView: View {
 
     @StateObject private var dVM = NotePageVM()
     
+    //Initalize state object
     init(note: NoteModel? = nil) {
         _dVM = StateObject(wrappedValue: NotePageVM(note: note))
     }
@@ -45,7 +46,6 @@ struct NotePageDrawView: View {
                             IconBtn(action: { undoManager?.redo() } , symbol:"arrow.uturn.forward")
                         }
                         .padding(.trailing, 15)
-                        
                     }
                 
                     Text(getCurrentDateDetailed())
@@ -62,7 +62,6 @@ struct NotePageDrawView: View {
                     
                     VStack {
                         Spacer()
-
                         Button((note == nil) ? "Save Note" : "Update Note") {
                             Task {
                                 await saveNoteDraw()

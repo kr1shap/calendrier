@@ -4,7 +4,8 @@
 //
 //  Created by Krisha Patel on 2025-08-26.
 //
-
+//MARK: IGNORE
+//MARK: FUTURE IMPLEMENTATION
 import SwiftUI
 import PhotosUI
 

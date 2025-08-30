@@ -12,9 +12,9 @@ class NotePageVM: ObservableObject {
     @Published var noteTitle: String = ""
     @Published var noteContent: String = ""
     @Published var isStarred = false
-    
-    @Published var existingNote: NoteModel?
+    @Published var existingNote: NoteModel? //whether we are using an existing or new note
 
+    //MARK: Initalizes NoteVM contents
     init(note: NoteModel? = nil) {
         self.noteTitle = note?.title ?? ""
         self.noteContent = note?.content ?? ""
@@ -23,10 +23,14 @@ class NotePageVM: ObservableObject {
             
     }
     
+    //MARK: Private Functions
+    
+    //Gets title to put
     private func getTitle() -> String {
         noteTitle.isEmpty ? "No title" : noteTitle
     }
     
+    //Gets content to put in
     private func getContent(_ forDrawing: Bool = false) -> String {
         if forDrawing {
             return "Drawing Content..."
@@ -35,6 +39,9 @@ class NotePageVM: ObservableObject {
         }
     }
     
+    //MARK: Helper functions
+    
+    //Updates a current note
     func update(note: NoteModel, drawing: PKDrawing?, _ isDrawing: Bool = false) -> Void {
         note.title = getTitle()
         note.content = getContent(note.isDrawing)
@@ -45,6 +52,7 @@ class NotePageVM: ObservableObject {
         else {note.drawing = nil}
     }
     
+    //Creates a 'drawing' or 'regular' note
     func newNoteD(drawing: PKDrawing) -> NoteModel {
         return NoteModel(title: getTitle(), content: getContent(true), isStarred: isStarred, drawingData: drawing.dataRepresentation(), true)
     }
@@ -53,6 +61,7 @@ class NotePageVM: ObservableObject {
         return NoteModel(title: getTitle(), content: getContent(), isStarred: isStarred, false)
     }
     
+    //Loads current drawing representation, if any
     func loadDrawing() -> PKDrawing {
         guard let data = existingNote?.drawing else { return PKDrawing() }
         do {

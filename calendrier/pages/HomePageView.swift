@@ -30,7 +30,7 @@ struct HomePageView: View {
             VStack(alignment: .leading, spacing: 20){
                 NavTitleView()
                 DateCard()
-                //TODO: make filters work
+                //Filter bar with deletion
                 HStack {
                     FilterBar(selection: $hVM.filter)
                     //Delete button
@@ -82,33 +82,12 @@ struct HomePageView: View {
             }
         }
         .confirmationDialog("Select your note.", isPresented: $hVM.showingSheet, titleVisibility: .visible) {
-            Button("Draw Note") {
-                hVM.addNoteD()
-            }
-            Button("Text Note") {
-                hVM.addNoteR()
-            }
+            Button("Draw Note") { hVM.addNoteD() }
+            Button("Text Note") { hVM.addNoteR() }
         }
         .safeAreaInset(edge: .bottom) {
             //'Add note' button
-            Button("Add note") {
-                hVM.showingSheet = true
-            }
-            .font(.DMSans(.title3))
-            .fontWeight(.semibold)
-            .padding(10)
-            .frame(maxWidth: .infinity, alignment: .center)
-            .background(
-                RoundedRectangle(cornerRadius: 30)
-                    .fill(Color.offWhite)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 30)
-                            .stroke(Color.darkGrayBackground, lineWidth: 1)
-                    )
-            )
-            .foregroundColor(.darkGrayBackground)
-            .padding(.horizontal, 50)
-            .padding(.vertical, 20)
+            TextBtn(action: {hVM.showingSheet = true}, text: "Add Note")
         }
         .onChange(of: hVM.navigateNote) {
             if !hVM.navigateNote {

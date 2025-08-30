@@ -20,7 +20,6 @@ struct NotePageView: View {
         _nVM = StateObject(wrappedValue: NotePageVM(note: note))
     }
 
-    
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {

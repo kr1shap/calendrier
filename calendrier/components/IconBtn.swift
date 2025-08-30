@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct IconBtn: View {
-    var action: () -> Void
+    var action: () -> Void     //action to preform when button is clicked
     var symbol: String
     var body: some View {
         Button {

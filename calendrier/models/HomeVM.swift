@@ -10,16 +10,16 @@ import SwiftUI
 
 @MainActor
 class HomeVM: ObservableObject {
-    
-    @Published var isDelete: Bool = false
-    @Published var showingSheet: Bool = false
-    @Published var isDrawingNote: Bool = false
+    @Published var isDelete: Bool = false   //deletion mode
+    @Published var showingSheet: Bool = false   //showing selection sheet
+    @Published var isDrawingNote: Bool = false  //selected note
     @Published var selectedNote: NoteModel? = nil
-    @Published var navigateNote = false
+    @Published var navigateNote = false         //navigation bool to next page
     @Published var filter: FilterType = .none
     
     
-    func setNewNote() -> Void {
+    //MARK: Adding/new note function
+    private func setNewNote() -> Void {
         navigateNote = true
         selectedNote = nil
     }

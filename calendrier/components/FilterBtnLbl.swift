@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FilterBtnLbl: View {
     var selected: String
-    var isSelected: Bool = false
+    var isSelected: Bool = false //default false
     
     var body: some View {
        HStack(spacing: 8) {
@@ -27,12 +27,12 @@ struct FilterBtnLbl: View {
                .fill(isSelected ? Color.deepBlueAccent : Color.offWhite)
                .overlay(
                    RoundedRectangle(cornerRadius: 20)
-                       .stroke( Color.darkGrayBackground, lineWidth: 1)
+                       .stroke(Color.darkGrayBackground, lineWidth: 1)
                )
        )
    }
 }
 
 #Preview {
-    FilterBtnLbl(selected:"yo mom", isSelected: true)
+    FilterBtnLbl(selected:"starred", isSelected: true)
 }

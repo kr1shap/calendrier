@@ -27,8 +27,8 @@ func getModifiedDateDetailed(date: Date) -> String {
 
 func getSummary(summary: String) -> String {
     let truncatedContent: String
-    if summary.count > 20 {
-        truncatedContent = summary.prefix(20) + "…"
+    if summary.count > 30 {
+        truncatedContent = summary.prefix(30) + "…"
     } else { return summary }
     return truncatedContent
 }

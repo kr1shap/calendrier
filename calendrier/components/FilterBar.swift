@@ -12,6 +12,7 @@ struct FilterBar: View {
     
     var body: some View {
         HStack(spacing: 20) {
+            //Iterate through all filters
             ForEach(FilterType.visibleCases, id: \.self) { filter in
                 Button(action: {
                     if selection == filter { selection = .none }

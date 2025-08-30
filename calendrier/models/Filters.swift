@@ -11,6 +11,7 @@ enum FilterType: String, Hashable, CaseIterable {
     case oldest
     case starred
     
+    //All filters (except the 'none' default case)
     static var visibleCases: [FilterType] {
         allCases.filter { $0 != .none }
     }

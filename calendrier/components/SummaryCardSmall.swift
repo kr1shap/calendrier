@@ -12,49 +12,36 @@ struct SummaryCardSmall: View {
     var modDate: Date
     var deleteMode: Bool = false
     var isStarred: Bool
-    var onDelete: () -> Void
+    var onDelete: () -> Void //function to call to delete the note
    
     var body: some View {
         HStack(alignment: .center) {
+            //Delete mode button
             if deleteMode {
-                Button {
-                    onDelete()
-                } label: {
-                    Image(systemName:"x.circle.fill")
-                        .font(.title)
-                        .foregroundStyle(Color.deepBlueAccent)
-                }
-                .transition(.scale.combined(with: .opacity))
-
+                DeleteButton(onDelete: {onDelete()})
             }
+            //Main title contents
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     Image(.calendierNoteIcon)
                         .resizable()
                         .frame(width: 25, height: 25)
                     Text(title)
-                        .foregroundStyle(Color.deepBlueAccent)
                         .fontWeight(.bold)
                         .font(.DMSans(.title3))
                         .lineLimit(2)
                         .truncationMode(.tail)
-                        .padding(0)
                     Spacer()
                     if isStarred {
                         Image(systemName:"star.fill")
                             .font(.system(size: 20))
-                            .foregroundStyle(Color.deepBlueAccent)
                     }
                     
                 }
+                .foregroundStyle(Color.deepBlueAccent)
                 .padding(0)
                 
-                Text(getModifiedDateDetailed(date: modDate))
-                    .foregroundStyle(Color.secondary)
-                    .font(.DMSans(.caption2))
-                    .truncationMode(.tail)
-                    .fontWeight(.light)
-                    .padding(.bottom, 7)
+                CardDate(modDate: modDate)
                 
                 Text(summary.isEmpty ? "No Content" : summary)
                     .font(.DMSans(.callout))
@@ -76,6 +63,21 @@ struct SummaryCardSmall: View {
         }
         .padding(.vertical, 10)
         .padding(.horizontal, 30)
+    }
+}
+
+
+//MARK: UI for showing the card date
+private struct CardDate: View {
+    var modDate: Date
+    
+    var body: some View {
+        Text(getModifiedDateDetailed(date: modDate))
+            .foregroundStyle(Color.secondary)
+            .font(.DMSans(.caption2))
+            .fontWeight(.light)
+            .truncationMode(.tail)
+            .padding(.bottom, 7)
     }
 }
 

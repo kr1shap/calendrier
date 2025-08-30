@@ -6,7 +6,7 @@
 //
 import SwiftUI
 struct SelectorButton: View {
-    @Binding var trigger: Bool
+    @Binding var trigger: Bool //changes symbols based on true or false
     var symbolTrue: String
     var symbolFalse: String
     var body: some View {
