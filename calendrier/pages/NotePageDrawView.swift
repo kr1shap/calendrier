@@ -64,7 +64,9 @@ struct NotePageDrawView: View {
                         Spacer()
 
                         Button((note == nil) ? "Save Note" : "Update Note") {
-                            saveNoteDraw()
+                            Task {
+                                await saveNoteDraw()
+                            }
                         }
                         .font(.DMSans(.title3))
                         .fontWeight(.semibold)
@@ -100,9 +102,9 @@ struct NotePageDrawView: View {
     
     //MARK: Saves note
     //TODO: MODULARIZE PROPERLY (VM)
-    private func saveNoteDraw() {
+    private func saveNoteDraw() async {
            if let note = dVM.existingNote {
-               dVM.update(note:note, drawing: drawing)
+               dVM.update(note:note, drawing: drawing, true)
            } else { context.insert(dVM.newNoteD(drawing: drawing)) }
            do {
                try context.save()
@@ -117,20 +119,61 @@ struct NotePageDrawView: View {
 
 
 // Drawing Canvas wrapper
+//struct DrawingCanvas: UIViewRepresentable {
+//    let toolPicker: PKToolPicker
+//    @Binding var drawing: PKDrawing
+//
+//    
+//    func makeUIView(context: Context) -> PKCanvasView {
+//        let canvasView = PKCanvasView()
+//        canvasView.drawingPolicy = .anyInput
+//        canvasView.tool = PKInkingTool(.pen, color: .black, width: 15)
+//        canvasView.backgroundColor = UIColor.softCream
+//        canvasView.delegate = context.coordinator
+//        toolPicker.addObserver(canvasView)
+//        toolPicker.setVisible(true, forFirstResponder: canvasView)
+//        canvasView.becomeFirstResponder()
+//        return canvasView
+//    }
+//    
+//    func updateUIView(_ uiView: PKCanvasView, context: Context) {
+//        if uiView.drawing != drawing {
+//            uiView.drawing = drawing
+//        }
+//    }
+//    
+//    func makeCoordinator() -> Coordinator {
+//           Coordinator(drawing: $drawing)
+//    }
+//       
+//   class Coordinator: NSObject, PKCanvasViewDelegate {
+//       @Binding var drawing: PKDrawing
+//       init(drawing: Binding<PKDrawing>) { _drawing = drawing }
+//       func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {
+//           drawing = canvasView.drawing
+//       }
+//    }
+//}
+
+//TODO: Fix timing out issues
+// Drawing Canvas wrapper
 struct DrawingCanvas: UIViewRepresentable {
     let toolPicker: PKToolPicker
     @Binding var drawing: PKDrawing
 
-    
     func makeUIView(context: Context) -> PKCanvasView {
         let canvasView = PKCanvasView()
         canvasView.drawingPolicy = .anyInput
         canvasView.tool = PKInkingTool(.pen, color: .black, width: 15)
         canvasView.backgroundColor = UIColor.softCream
+        
         canvasView.delegate = context.coordinator
+        
         toolPicker.addObserver(canvasView)
         toolPicker.setVisible(true, forFirstResponder: canvasView)
         canvasView.becomeFirstResponder()
+        
+        canvasView.drawing = drawing
         return canvasView
     }
     
@@ -141,15 +184,19 @@ struct DrawingCanvas: UIViewRepresentable {
     }
     
     func makeCoordinator() -> Coordinator {
-           Coordinator(drawing: $drawing)
+        Coordinator(drawing: $drawing)
     }
-       
-   class Coordinator: NSObject, PKCanvasViewDelegate {
-       @Binding var drawing: PKDrawing
-       init(drawing: Binding<PKDrawing>) { _drawing = drawing }
-       func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {
-           drawing = canvasView.drawing
-       }
+    
+    class Coordinator: NSObject, PKCanvasViewDelegate {
+        @Binding var drawing: PKDrawing
+        
+        init(drawing: Binding<PKDrawing>) {
+            _drawing = drawing
+        }
+        
+        func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {
+            drawing = canvasView.drawing
+        }
     }
 }
 

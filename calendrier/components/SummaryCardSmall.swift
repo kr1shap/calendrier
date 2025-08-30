@@ -11,6 +11,7 @@ struct SummaryCardSmall: View {
     var title: String
     var modDate: Date
     var deleteMode: Bool = false
+    var isStarred: Bool
     var onDelete: () -> Void
    
     var body: some View {
@@ -22,7 +23,6 @@ struct SummaryCardSmall: View {
                     Image(systemName:"x.circle.fill")
                         .font(.title)
                         .foregroundStyle(Color.deepBlueAccent)
-
                 }
                 .transition(.scale.combined(with: .opacity))
 
@@ -39,6 +39,13 @@ struct SummaryCardSmall: View {
                         .lineLimit(2)
                         .truncationMode(.tail)
                         .padding(0)
+                    Spacer()
+                    if isStarred {
+                        Image(systemName:"star.fill")
+                            .font(.system(size: 20))
+                            .foregroundStyle(Color.deepBlueAccent)
+                    }
+                    
                 }
                 .padding(0)
                 
@@ -73,7 +80,7 @@ struct SummaryCardSmall: View {
 }
 
 #Preview {
-    SummaryCardSmall(summary: "well ok this is a bit touch go do wel", title: "B09 Course Notes", modDate: Date(), deleteMode: false, onDelete: {})
+    SummaryCardSmall(summary: "well ok this is a bit touch go do wel", title: "B09 Course Notes", modDate: Date(), deleteMode: false, isStarred: true, onDelete: {})
 }
 
 

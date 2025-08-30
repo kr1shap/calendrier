@@ -10,37 +10,22 @@ import SwiftData
 struct HomePageView: View {
     @StateObject private var hVM = HomeVM()
     @Environment(\.modelContext) private var context
-//    @Query(sort: [SortDescriptor(\NoteModel.createdAt, order: .reverse)])
-//    var notes: [NoteModel]
-
-    @Query(sort: [SortDescriptor(\NoteModel.createdAt, order: .reverse)])
-    var notes: [NoteModel]
-//
-//    @Query(
-//        filter: #Predicate { $0.isStarred == true },
-//        sort: [SortDescriptor(\NoteModel.createdAt, order: .reverse)]
-//    )
-//    var starredNotes: [NoteModel]
-//
-//    @Query(sort: [SortDescriptor(\NoteModel.modifiedDate, order: .reverse)])
-//    var latestNotes: [NoteModel]
-//
-//    @Query(sort: [SortDescriptor(\NoteModel.modifiedDate, order: .forward)])
-//    var oldestNotes: [NoteModel]
-//
-
-    // Selected notes state
-//    private var selNotes: [NoteModel] {
-//        switch hVM.filter {
-//        case .latest: return latestNotes
-//        case .oldest: return oldestNotes
-//        case .starred: return starredNotes
-//        case .none: return notes
-//        }
-//    }
-
-
     
+    @Query var notes: [NoteModel]
+    
+    private var filteredNotes: [NoteModel] {
+        switch hVM.filter {
+        case .latest:
+            return notes.sorted(by: { $0.modifiedDate > $1.modifiedDate })
+        case .oldest:
+            return notes.sorted(by: { $0.modifiedDate < $1.modifiedDate })
+        case .starred:
+            return notes.filter({ $0.isStarred })
+        case .none:
+            return notes
+        }
+    }
+
     var body: some View {
             VStack(alignment: .leading, spacing: 20){
                 NavTitleView()
@@ -62,15 +47,16 @@ struct HomePageView: View {
                 }
                 
                 ScrollView {
-                    ForEach(notes) { note in
-                        SummaryCardSmall(summary: getSummary(summary: note.content), title: note.title, modDate: note.modifiedDate, deleteMode: hVM.isDelete, onDelete: {deleteNote(note:note)} )
+                    ForEach(filteredNotes) { note in
+                        SummaryCardSmall(summary: getSummary(summary: note.content), title: note.title, modDate: note.modifiedDate, deleteMode: hVM.isDelete, isStarred: note.isStarred, onDelete: {deleteNote(note:note)} )
                             .onTapGesture {
                                 hVM.selectedNote = note
                                 hVM.navigateNote = true
+                                hVM.isDrawingNote = note.isDrawing
                             }
                     }
         
-                    if notes.isEmpty {
+                    if filteredNotes.isEmpty {
                         Text("No notes yet...")
                             .font(.DMSans(.title3))
                             .fontWeight(.semibold)
@@ -80,7 +66,6 @@ struct HomePageView: View {
                 }
             
         }
-
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
             Color.softCream
@@ -125,18 +110,13 @@ struct HomePageView: View {
             .padding(.horizontal, 50)
             .padding(.vertical, 20)
         }
-//        .onChange(of: hVM.filter) {
-//            switch hVM.filter {
-//            case .latest:
-//                selNotes = latestNotes
-//            case .oldest:
-//                selNotes = oldestNotes
-//            case .starred:
-//                selNotes = starredNotes
-//            case .none:
-//                selNotes = notes
-//            }
-//        }
+        .onChange(of: hVM.navigateNote) {
+            if !hVM.navigateNote {
+                hVM.selectedNote = nil
+                hVM.isDrawingNote = false
+            }
+        }
+
     }
     //TODO: Modularize properly
     private func deleteNote(note: NoteModel) -> Void {

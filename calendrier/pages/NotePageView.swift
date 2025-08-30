@@ -77,7 +77,7 @@ struct NotePageView: View {
             .safeAreaInset(edge:.bottom) {
                 //save/star button view
                 Button((note == nil) ? "Save Note" : "Update Note") {
-                    saveNote()
+                    Task { await saveNote() }
                 }
                 .font(.DMSans(.title3))
                 .fontWeight(.semibold)
@@ -102,7 +102,7 @@ struct NotePageView: View {
     
     //MARK: Saves note
     //TODO: MODULARIZE PROPERLY (VM)
-    private func saveNote() {
+    private func saveNote() async {
         if let note = nVM.existingNote  {
             nVM.update(note: note, drawing: nil)
         } else { context.insert(nVM.newNoteR()) }

@@ -10,13 +10,13 @@ import SwiftUI
 
 @MainActor
 class HomeVM: ObservableObject {
+    
     @Published var isDelete: Bool = false
     @Published var showingSheet: Bool = false
     @Published var isDrawingNote: Bool = false
     @Published var selectedNote: NoteModel? = nil
     @Published var navigateNote = false
     @Published var filter: FilterType = .none
-    
     
     
     func setNewNote() -> Void {

@@ -27,7 +27,7 @@ class NotePageVM: ObservableObject {
         noteTitle.isEmpty ? "No title" : noteTitle
     }
     
-    private func getContent(forDrawing: Bool = false) -> String {
+    private func getContent(_ forDrawing: Bool = false) -> String {
         if forDrawing {
             return "Drawing Content..."
         } else {
@@ -35,17 +35,18 @@ class NotePageVM: ObservableObject {
         }
     }
     
-    func update(note: NoteModel, drawing: PKDrawing?) -> Void {
+    func update(note: NoteModel, drawing: PKDrawing?, _ isDrawing: Bool = false) -> Void {
         note.title = getTitle()
-        note.content = getContent(forDrawing: note.isDrawing)
+        note.content = getContent(note.isDrawing)
         note.isStarred = isStarred
         note.updateModifiedDate()
+        note.isDrawing = isDrawing
         if note.isDrawing { note.drawing = drawing?.dataRepresentation()}
         else {note.drawing = nil}
     }
     
     func newNoteD(drawing: PKDrawing) -> NoteModel {
-        return NoteModel(title: getTitle(), content: getContent(), isStarred: isStarred, drawingData: drawing.dataRepresentation(), true)
+        return NoteModel(title: getTitle(), content: getContent(true), isStarred: isStarred, drawingData: drawing.dataRepresentation(), true)
     }
     
     func newNoteR() -> NoteModel {
