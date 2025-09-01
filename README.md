@@ -14,6 +14,10 @@ As someone who loves to delve into UX/UI solutions, I designed this app to provi
 
 
 ---
+## updates!
+* added some more animations for a smoother UX experience. Toggle your starred notes with a simple 'swipe'.
+
+---
 
 ## ‼️ features
 
