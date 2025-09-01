@@ -13,6 +13,9 @@ struct HomePageView: View {
     
     @Query var notes: [NoteModel]
     
+    @State private var offsetX: CGFloat = 0
+    @GestureState private var isDragging = false
+    
     private var filteredNotes: [NoteModel] {
         switch hVM.filter {
         case .latest:
@@ -48,12 +51,45 @@ struct HomePageView: View {
                 
                 ScrollView {
                     ForEach(filteredNotes) { note in
-                        SummaryCardSmall(summary: getSummary(summary: note.content), title: note.title, modDate: note.modifiedDate, deleteMode: hVM.isDelete, isStarred: note.isStarred, onDelete: {deleteNote(note:note)} )
-                            .onTapGesture {
-                                hVM.selectedNote = note
-                                hVM.navigateNote = true
-                                hVM.isDrawingNote = note.isDrawing
+                        ZStack {
+                            HStack {
+                                Image(systemName: note.isStarred ? "star.slash.fill" : "star.fill")
+                                    .foregroundColor(Color.deepBlueAccent)
+                                    .font(.system(size: 20))
+                                    .scaleEffect(min(max(offsetX / 80, 0.5), 1.1))
+                                    .opacity(min(offsetX / 80, 1))
+                                Spacer()
                             }
+                            .padding(.leading, 20)
+                            
+                            SummaryCardSmall(summary: getSummary(summary: note.content), title: note.title, modDate: note.modifiedDate, deleteMode: hVM.isDelete, isStarred: note.isStarred, onDelete: {deleteNote(note:note)} )
+                                .onTapGesture {
+                                    hVM.selectedNote = note
+                                    hVM.navigateNote = true
+                                    hVM.isDrawingNote = note.isDrawing
+                                }
+                                .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                                        Button {
+                                            withAnimation { note.isStarred.toggle()}
+                                        } label: { Label("Star", systemImage: note.isStarred ? "star.slash" : "star.fill") }
+                                        .tint(Color.deepBlueAccent)
+                                }
+                                .offset(x: offsetX)
+                                .gesture(
+                                    DragGesture()
+                                        .onChanged { value in
+                                            if value.translation.width > 0 { offsetX = value.translation.width }
+                                        }
+                                        .onEnded { value in
+                                            if value.translation.width > 60 { note.isStarred.toggle() }
+                                            withAnimation {
+                                                offsetX = 0
+                                            }
+                                        }
+                                )
+
+                        }
+                        
                     }
         
                     if filteredNotes.isEmpty {
